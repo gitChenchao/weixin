@@ -1,0 +1,14 @@
+com\cc\weixin\controller\IndexController.class
+com\cc\weixin\pojo\TextMessage.class
+com\cc\weixin\pojo\WxMovieSearchModel.class
+com\cc\weixin\util\HttpJsonUtil.class
+com\cc\weixin\util\HttpClientUtil.class
+com\cc\weixin\constant\SystemConstants.class
+com\cc\weixin\controller\WxJqrController.class
+com\cc\weixin\pojo\WeiXinTlModel.class
+com\cc\weixin\util\CheckUtil.class
+com\cc\weixin\util\JsonUtils.class
+com\cc\weixin\pojo\ImageItem.class
+com\cc\weixin\pojo\WeiXinTlResultModel.class
+com\cc\weixin\pojo\ImagesAndTextMessage.class
+com\cc\weixin\util\MessageUtil.class
