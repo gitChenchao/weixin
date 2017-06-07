@@ -55,46 +55,64 @@ public class WxIndexController {
 			String event = map.get("Event");
 			String fhMessage="";
 			if(MessageUtil.MESSAGE_TEXT.equals(msgType)){
-				//调用微信机器人返回信息
-				String tulingMessage = null;
-				String result = MessageUtil.jqr(content, fromUserName.replaceAll("-", "").replaceAll("_", "").substring(0,15), null);
-				WeiXinTlResultModel wxModel = JsonUtils.jsonToPojo(result, WeiXinTlResultModel.class);
-				System.out.println(wxModel.getCode());
-				if(wxModel.getCode().equals("100000")||wxModel.getCode().equals("200000")){//文本类和连接类 文本消息
-					if(wxModel.getCode().equals("100000")){
-						tulingMessage=wxModel.getText();
-					}else if(wxModel.getCode().equals("200000")){
-						tulingMessage=wxModel.getText()+wxModel.getUrl();
-					}
-					TextMessage message = new TextMessage();
-					message.setFromUserName(toUserName);
-					message.setToUserName(fromUserName);
-					message.setMsgType("text");
-					message.setCreateTime(new Date().getTime());
-					//message.setContent("您发送的内容是："+content);
-					message.setContent(tulingMessage);
-					fhMessage=MessageUtil.textMessageToXml(message);
-				}else if(wxModel.getCode().equals("308000")){//集合类 图文消息
-					tulingMessage = wxModel.getList().get(0).getIcon()+wxModel.getList().get(0).getName();
+				if(content.equals("使用帮助")){
 					ImagesAndTextMessage itMessage = new ImagesAndTextMessage();
 					itMessage.setToUserName(fromUserName);
 					itMessage.setFromUserName(toUserName);
 					itMessage.setCreateTime(new Date().getTime());
 					itMessage.setMsgType("news");
-					itMessage.setArticleCount("5");
+					itMessage.setArticleCount("1");
 					List<ImageItem> item = new ArrayList<ImageItem>();
-					ImageItem ii = null;
-					for (int i = 0; i < 5; i++) {
-						ii = new ImageItem();
-						ii.setDescription(wxModel.getList().get(i).getInfo());
-						ii.setTitle(wxModel.getList().get(i).getName());
-						ii.setPicUrl(wxModel.getList().get(i).getIcon());
-						ii.setUrl(wxModel.getList().get(i).getDetailurl());
-						item.add(ii);
-					}
+					ImageItem ii = new ImageItem();
+					ii = new ImageItem();
+					ii.setDescription("骑猪上树使用帮助");
+					ii.setTitle("骑猪上树使用帮助");
+					ii.setPicUrl("http://images2015.cnblogs.com/blog/860939/201706/860939-20170607145553934-858245773.png");
+					ii.setUrl("http://www.cnblogs.com/qizhushangshu/p/6957080.html");
+					item.add(ii);
 					itMessage.setArticles(item);
 					fhMessage = MessageUtil.imagesAndTextToXml(itMessage);
-					System.out.println(fhMessage);
+				}else{
+					//调用微信机器人返回信息
+					String tulingMessage = null;
+					String result = MessageUtil.jqr(content, fromUserName.replaceAll("-", "").replaceAll("_", "").substring(0,15), null);
+					WeiXinTlResultModel wxModel = JsonUtils.jsonToPojo(result, WeiXinTlResultModel.class);
+					if(wxModel.getCode().equals("100000")||wxModel.getCode().equals("200000")){//文本类和连接类 文本消息
+						if(wxModel.getCode().equals("100000")){
+							tulingMessage=wxModel.getText();
+						}else if(wxModel.getCode().equals("200000")){
+							tulingMessage=wxModel.getText()+wxModel.getUrl();
+						}
+						TextMessage message = new TextMessage();
+						message.setFromUserName(toUserName);
+						message.setToUserName(fromUserName);
+						message.setMsgType("text");
+						message.setCreateTime(new Date().getTime());
+						//message.setContent("您发送的内容是："+content);
+						message.setContent(tulingMessage);
+						fhMessage=MessageUtil.textMessageToXml(message);
+					}else if(wxModel.getCode().equals("308000")){//集合类 图文消息
+						tulingMessage = wxModel.getList().get(0).getIcon()+wxModel.getList().get(0).getName();
+						ImagesAndTextMessage itMessage = new ImagesAndTextMessage();
+						itMessage.setToUserName(fromUserName);
+						itMessage.setFromUserName(toUserName);
+						itMessage.setCreateTime(new Date().getTime());
+						itMessage.setMsgType("news");
+						itMessage.setArticleCount("5");
+						List<ImageItem> item = new ArrayList<ImageItem>();
+						ImageItem ii = null;
+						for (int i = 0; i < 5; i++) {
+							ii = new ImageItem();
+							ii.setDescription(wxModel.getList().get(i).getInfo());
+							ii.setTitle(wxModel.getList().get(i).getName());
+							ii.setPicUrl(wxModel.getList().get(i).getIcon());
+							ii.setUrl(wxModel.getList().get(i).getDetailurl());
+							item.add(ii);
+						}
+						itMessage.setArticles(item);
+						fhMessage = MessageUtil.imagesAndTextToXml(itMessage);
+						System.out.println(fhMessage);
+					}
 				}
 			//关注/取消关注事件
 			}else if(MessageUtil.MESSAGE_EVENT.equals(msgType)){
@@ -105,7 +123,7 @@ public class WxIndexController {
 					message.setToUserName(fromUserName);
 					message.setMsgType("text");
 					message.setCreateTime(new Date().getTime());
-					message.setContent("感谢您关注骑猪上树，我们会为您带来更好的平台！");
+					message.setContent("感谢您关注骑猪上树，我们会为您带来更好的平台！回复 使用帮助 查看帮助手册");
 					fhMessage=MessageUtil.textMessageToXml(message);
 				//取消关注
 				}else if(MessageUtil.MESSAGE_UNSUBSCRIBE.equals(event)){
